@@ -1,6 +1,10 @@
 from svgutils.compose import *
 import numpy as np
 from IPython.display import display
+from importlib import resources
+
+def get_resource(module: str, name: str) -> str:
+    return resources.files(module).joinpath(name)
 
 class segment(object):
     def __init__(self, s: str):
@@ -79,7 +83,7 @@ class segment(object):
         nx = (nw - ((w*np.cos(np.deg2rad(angle))) + (h*np.cos(np.deg2rad(90+angle)))).round(3))/2
         ny = (nh - ((w*np.sin(np.deg2rad(angle))) + (h*np.sin(np.deg2rad(90+angle)))).round(3))/2
         
-        self.__figure__ = Figure(str(nw) + 'mm', str(nh) + 'mm', SVG(self.__svg__).move(nx,ny).rotate(angle))
+        self.__figure__ = Figure(str(nw) + 'mm', str(nh) + 'mm', SVG(get_resource('img', self.__svg__)).move(nx,ny).rotate(angle))
         
         display(self.__figure__)
         
@@ -159,7 +163,7 @@ class track(object):
             xmin = min(xmin, xabs, xabs + sum(x for x in nw if x < 0))
             ymin = min(ymin, yabs, yabs + sum(y for y in nh if y < 0))
     
-            asm.append(SVG(seg.__svg__).move(round(xabs, 3), round(yabs, 3)).rotate(round(rot, 3)))
+            asm.append(SVG(get_resource('img', seg.__svg__)).move(round(xabs, 3), round(yabs, 3)).rotate(round(rot, 3)))
     
             xabs += ((seg.__img__['tr'][0] * np.cos(np.deg2rad(rot))) + (seg.__img__['tr'][1] * np.cos(np.deg2rad(rot + 90))) + (gap * np.cos(np.deg2rad(rot))))
             yabs += ((seg.__img__['tr'][0] * np.sin(np.deg2rad(rot))) + (seg.__img__['tr'][1] * np.sin(np.deg2rad(rot + 90))) + (gap * np.sin(np.deg2rad(rot))))

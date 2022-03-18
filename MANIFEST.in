@@ -1,1 +1,1 @@
-include img/*.svg
+include src/img/*.svg
