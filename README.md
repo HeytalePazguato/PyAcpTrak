@@ -6,8 +6,8 @@
 
 [![PyPI Latest Release](https://img.shields.io/pypi/v/PyAcpTrak)](https://pypi.org/project/PyAcpTrak/)
 [![PyPI License](https://img.shields.io/pypi/l/PyAcpTrak)](https://github.com/HeytalePazguato/PyAcpTrak/blob/master/LICENSE)
-[![Python versions]](https://img.shields.io/pypi/pyversions/PyAcpTrak)
-[![Twitter]](https://img.shields.io/twitter/follow/HeytalePazguato?style=social)
+[![Python versions](https://img.shields.io/pypi/pyversions/PyAcpTrak)]
+[![Twitter](https://img.shields.io/twitter/follow/HeytalePazguato?style=social)]
 
 
 ## Install
