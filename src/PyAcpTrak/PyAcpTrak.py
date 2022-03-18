@@ -197,3 +197,8 @@ class loop(object):
             else:
                 self.track = TRACK90 + ((self.width - 2) * TRACK0) + TRACK90 + ((self.length - 2) * TRACK0) + TRACK90 + ((self.width - 2) * TRACK0) + TRACK90 + ((self.length - 2) * TRACK0)
 
+TRACK0 = track([segment('aa')])
+TRACK45 = track([segment('ab'), segment('ba')])
+TRACK90 = track([segment('ab'), segment('bb'), segment('ba')])
+TRACK135 = track([segment('ab'), segment('bb'), segment('bb'), segment('ba')])
+TRACK180 = track([segment('ab'), segment('bb'), segment('bb'), segment('bb'), segment('ba')])

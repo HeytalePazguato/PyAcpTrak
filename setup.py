@@ -1,7 +1,7 @@
 from distutils.core import setup
 from setuptools import setup, find_packages
 
-VERSION = '0.0.3'
+VERSION = '0.0.4'
 DESCRIPTION = 'Create ACOPOStrak resources for training, meetings, mappView widgets, etc...'
 
 setup(
@@ -13,7 +13,7 @@ setup(
   author = 'HeytalePazguato (Jorge Centeno)',
   author_email = 'Heytale.Pazguato@gmail.com',
   url = 'https://github.com/HeytalePazguato/PyAcpTrak',
-  download_url = 'https://github.com/HeytalePazguato/PyAcpTrak/archive/refs/tags/v0_0_3.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/HeytalePazguato/PyAcpTrak/archive/refs/tags/v0_0_4.tar.gz',    # I explain this later on
   keywords = ['ACOPOStrak', 'ACPTrak', 'PyAcpTrak', 'python'],
   install_requires=[
           'svgutils',
@@ -25,7 +25,7 @@ setup(
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
     'Operating System :: Microsoft :: Windows',
   ],
 )
