@@ -138,4 +138,4 @@ loop(3,2).track.plot(190)
 
 Copyright © Jorge Centeno
 
-PyAcpTrak is open-sourced software licensed under the [MIT license](LICENSE.md).
+PyAcpTrak is open-sourced software licensed under the [MIT license](LICENSE).
