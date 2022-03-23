@@ -1,1 +1,3 @@
-include src/img/*.svg
+include *.in
+include *.toml
+recursive-include src *.svg
