@@ -6,7 +6,7 @@ from importlib import resources
 def get_resource(module: str, name: str) -> str:
     return resources.files(module).joinpath(name)
 
-class segment(object):
+class Segment(object):
     def __init__(self, s: str):
         s = s.lower()
         self.__figure__ = None
@@ -96,39 +96,39 @@ class segment(object):
             self.__figure__.save(name)
             
     def __add__(self, other):
-        if (isinstance(other, segment)):
-            new_track = track([self, other])
+        if (isinstance(other, Segment)):
+            new_track = Track([self, other])
             return new_track
-        elif(isinstance(other, track)):
+        elif(isinstance(other, Track)):
             new_track = other.segments.copy()
             new_track.append(self)
-            return track(new_track)
+            return Track(new_track)
     
     def __mul__(self, other):
         if(isinstance(other, int)):
-            new_track = track([self])
+            new_track = Track([self])
             r_track = new_track.segments * other
-            return track(r_track)
+            return Track(r_track)
     
     __rmul__ = __mul__
     
-class track(object):
+class Track(object):
     def __init__(self, segments):
         self.segments = list(segments)
         
     def __add__(self, other):
         new_track = self.segments.copy()
-        if (isinstance(other, segment)):
+        if (isinstance(other, Segment)):
             new_track.append(other)
-        elif(isinstance(other, track)):
+        elif(isinstance(other, Track)):
             new_track = new_track + other.segments
-        return track(new_track)
+        return Track(new_track)
     
     def __mul__(self, other):
         if(isinstance(other, int)):
             new_track = self.segments.copy()
             new_track = new_track * other
-            return track(new_track)
+            return Track(new_track)
     
     def __len__(self):
         return len(self.segments)
@@ -187,7 +187,7 @@ class track(object):
     
     __rmul__ = __mul__
     
-class loop(object):
+class Loop(Track):
     def __init__(self, l = 2, w = 1):
         self.length = l
         self.width = w
@@ -197,12 +197,13 @@ class loop(object):
             raise ValueError('The width of the loop must be at least 1')
         else:
             if (self.width == 1):
-                self.track = TRACK180 + ((self.length - 2) * TRACK0) + TRACK180 + ((self.length - 2) * TRACK0)
+                self._track = TRACK180 + ((self.length - 2) * TRACK0) + TRACK180 + ((self.length - 2) * TRACK0)
             else:
-                self.track = TRACK90 + ((self.width - 2) * TRACK0) + TRACK90 + ((self.length - 2) * TRACK0) + TRACK90 + ((self.width - 2) * TRACK0) + TRACK90 + ((self.length - 2) * TRACK0)
+                self._track = TRACK90 + ((self.width - 2) * TRACK0) + TRACK90 + ((self.length - 2) * TRACK0) + TRACK90 + ((self.width - 2) * TRACK0) + TRACK90 + ((self.length - 2) * TRACK0)
+        super().__init__(self._track.segments)
 
-TRACK0 = track([segment('aa')])
-TRACK45 = track([segment('ab'), segment('ba')])
-TRACK90 = track([segment('ab'), segment('bb'), segment('ba')])
-TRACK135 = track([segment('ab'), segment('bb'), segment('bb'), segment('ba')])
-TRACK180 = track([segment('ab'), segment('bb'), segment('bb'), segment('bb'), segment('ba')])
+TRACK0 = Track([Segment('aa')])
+TRACK45 = Track([Segment('ab'), Segment('ba')])
+TRACK90 = Track([Segment('ab'), Segment('bb'), Segment('ba')])
+TRACK135 = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('ba')])
+TRACK180 = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('bb'), Segment('ba')])
