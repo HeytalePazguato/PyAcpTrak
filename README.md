@@ -1,6 +1,6 @@
 # pyacptrak
 
-## What is it? THIS
+## What is it?
 
 **pyacptrak** helps you to create ACOPOStrak resources for projects, training, meetings, mappView widgets, etc...
 
