@@ -160,8 +160,35 @@ Loop(3,2).plot(190).save()
 
 Output: Saves a "Loop.svg" file
 
+---
 ## License
 
 Copyright © Jorge Centeno
 
 Licensed under the [GNU GPLv3 license](LICENSE).
+
+---
+
+## Changes
+### v0.0.2 (In progress)
+> #### General changes:
+> - License changed from MIT to GNU GPLv3.
+> - Added TypeError for addition and multiplication operators.
+
+> #### Segment class:
+> - Change: Removed the `info` attribute.
+> - New feature: The `info()` method was added to get the segment information.
+> - Bug  fix: Multiplying a segment object by an integer "n" would create a Track class object with "n" segments all pointing to the same segment object.
+
+> #### Track class:
+> - New feature: The `info()` method was added to get the track information.
+> - New feature: The `seg_prefix` argument (Optional) was added to create the segment variable. The default value is "gSeg_".
+> - New feature: The `seg_offset` argument (Optional) was added to configure an offset for the segment variable. The default value is "1".
+> - Bug fix: Adding or multiplying Track objects would create a Track class object with elements pointing to the same segment objects
+
+> #### Loop class:
+> - New feature: Added addition and multiplication operators, the result will return an `Assembly` object.
+> - Bug fix: The inherited `length()` method didn't work because the `Loop` class had a `length` attribute that was overwritting the method `length()` of the parent class `Track`.
+
+> #### Assembly class:
+> - New feature: Class added to the package
