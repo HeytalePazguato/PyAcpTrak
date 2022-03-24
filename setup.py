@@ -23,7 +23,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU GPLv3 License',
         'Operating System :: OS Independent',
     ],
     package_dir = {'': 'src'},
@@ -37,7 +37,7 @@ setup(
     ],
     extras_require = {
     	'dev': [
-    		'pytest >= 3.7'
+    		'pytest >= 7.1'
     	],
     },
 )

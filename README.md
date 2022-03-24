@@ -2,7 +2,7 @@
 
 ## What is it?
 
-**pyacptrak** helps you to create ACOPOStrak resources for projects, training, meetings, mappView widgets, etc...
+**pyacptrak** helps you to create ACOPOStrak resources for projects, training, meetings, mappView widgets, etc... It is a powerful tool when used together with Jupyter-Lab (Or Jupyter Notes) but could be used as stand alone module.
 
 [![PyPI Latest Release](https://img.shields.io/pypi/v/pyacptrak)](https://pypi.org/project/pyacptrak/)
 [![PyPI License](https://img.shields.io/pypi/l/pyacptrak)](https://github.com/HeytalePazguato/pyacptrak/blob/master/LICENSE)
@@ -11,13 +11,25 @@
 
 
 ## Install
+
+To install pyacptrak, run the following command:
+
 ```
 pip install pyacptrak
 ```
 
+## Install with development dependencies
+
+To install pyacptrak, along with the tools you need to develop and run tests, run the following command:
+
+```
+pip install pyacptrak[dev]
+```
+
+
 ## Main Features
 
-### Work with segments
+### Work with segments (Segment class)
 
 The library support the 4 type of segments ('AA', 'AB', 'BA' and 'BB')
 
@@ -56,7 +68,7 @@ Segment('ab').plot(-45)
 
 <pyacptrak.pyacptrak.segment at 0x17daed042b0>
 
-### Work with tracks
+### Work with tracks (Track class)
 
 The library has 5 types of pre-built tracks (TRACK0, TRACK45, TRACK90, TRACK135 and TRACK180)
 
@@ -102,7 +114,7 @@ track1.plot(15)
 
 <pyacptrak.pyacptrak.track at 0x17daef17f10>
 
-### Work with loops
+### Work with loops (Loop class)
 
 The library supports working with loops, the arguments for the loop are width and height, the unit is considering the 660mm grid so a `loop(2,1)` would draw the smallest possible loop
 
@@ -134,8 +146,22 @@ Loop(3,2).plot(190)
 
 <pyacptrak.pyacptrak.track at 0x17daf0ce020>
 
+
+### Save the SVG files
+
+It is possible to save the SVG file of any of the classes by chaining the method `save()`.
+
+The `save()` accepts one argument to define the name of the output file, if no name is passed, the default filename will be the class name
+
+```
+from pyacptrak import *
+Loop(3,2).plot(190).save()
+```
+
+Output: Saves a "Loop.svg" file
+
 ## License
 
 Copyright © Jorge Centeno
 
-pyacptrak is open-sourced software licensed under the [MIT license](LICENSE).
+Licensed under the [GNU GPLv3 license](LICENSE).
