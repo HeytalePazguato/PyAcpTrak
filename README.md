@@ -174,6 +174,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > #### General changes:
 > - License changed from MIT to GNU GPLv3.
 > - Added TypeError for addition and multiplication operators.
+> - Added `typeguard` and `typing` packages to typecheck the methods.
 
 > #### Segment class:
 > - Change: Removed the `info` attribute.

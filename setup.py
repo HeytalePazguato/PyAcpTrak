@@ -34,6 +34,8 @@ setup(
 		'numpy >= 1.22.3',
 		'IPython >= 7.23.1',
 		'importlib >= 1.0.4',
+        'typing >= 3.7',
+        'typeguard >= 2.13.3'
     ],
     extras_require = {
     	'dev': [

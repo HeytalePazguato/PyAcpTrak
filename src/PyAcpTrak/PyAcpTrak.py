@@ -2,14 +2,20 @@ import svgutils.compose as sc
 import numpy as np
 from IPython.display import display
 from importlib import resources
-from typing import Final
+from typing import Final, List, Dict, TypeVar, Type, Sequence
+from typeguard import typechecked
+
+TSegment = TypeVar("TSegment", bound="Segment")
+TTrack = TypeVar("TTrack", bound="Track")
+TAssembly = TypeVar("TAssembly", bound="Assembly")
 
 def get_resource(module: str, name: str) -> str:
     return resources.files(module).joinpath(name)
 
 #Segment class
+@typechecked
 class Segment(object):
-    def __init__(self, s: str):
+    def __init__(self, s: str) -> None:
         self._s = s.lower()
         self._figure = None
         if (self._s == 'aa'):
@@ -79,14 +85,11 @@ class Segment(object):
         else:
             raise ValueError('Segment not supported. Supported segments "AA", "AB", "BA" or "BB"')
     
-    def info(self):
+    def info(self) -> Dict[str, any]:
         return {k: v for k, v in self._info.items() if v is not None}
 
-    def plot(self, angle: (int|float) = 0):
-        if isinstance(angle, int) or isinstance(angle, float):
-            angle %= 360.0
-        else:
-            raise TypeError('The "angle" argument must be integer or float')
+    def plot(self, angle: float = 0) -> TSegment:
+        angle %= 360.0
 
         w = self._img['w']
         h = self._img['h']
@@ -102,89 +105,80 @@ class Segment(object):
         
         return self
     
-    def save(self, name: str = 'Segment.svg'):
+    def save(self, name: str = 'Segment.svg') -> None:
         if not isinstance(name, str):
             raise TypeError('The "name" argument must be string')
 
         self._figure.save(name)
-            
-    def __add__(self, other):
+    
+    def __add__(self, other: (TSegment|TTrack)) -> TTrack:
         if isinstance(other, Segment):
-            new_track = Track([self, other])
-            return new_track
+            return Track([self, other])
         elif isinstance(other, Track):
-            new_track = other.segment.copy()
-            new_track.append(self)
+            new_track = [self]
+            new_track += other.segment.copy()
             return Track(new_track)
         else:
             raise TypeError('Segments can only be added to  Segment or Track objects')
     
-    def __mul__(self, other):
+    def __mul__(self, other: int) -> TTrack:
         if isinstance(other, int):
-            if other <= 0:
-                raise TypeError('Segments can only be multiplied by positive integers greater than 0')
+            if other < 0:
+                raise TypeError('Segments can only be multiplied by positive integers')
             l = list()
             for i in range(other):
                 l.append(self.__class__(self._s))
             return Track(l)
         else:
-            raise TypeError('Segments can only be multiplied by positive integers greater than 0')
+            raise TypeError('Segments can only be multiplied by positive integers')
     
     __rmul__ = __mul__
     
 #Track class
+@typechecked
 class Track(object):
-    def __init__(self, segments, seg_prefix: str = 'gSeg_', seg_offset: int = 1):
-        if not isinstance(seg_prefix, str):
-            raise TypeError('The "seg_prefix" argument must be string')
-
-        if isinstance(seg_offset, int):
-            if seg_offset < 0:
-                raise TypeError('The "seg_offset" argument must be a positive integer')
-        else:
+    def __init__(self, segments: List[Segment], seg_prefix: str = 'gSeg_', seg_offset: int = 1):
+        if seg_offset < 0:
             raise TypeError('The "seg_offset" argument must be a positive integer')
 
         self.segment = [Segment(seg._s) for seg in segments]
         self.seg_prefix = seg_prefix
         self.seg_offset = seg_offset
         
-    def __add__(self, other):
+    def __add__(self, other: (TSegment|TTrack)) -> TTrack:
         new_track = self.segment.copy()
         if isinstance(other, Segment):
             new_track.append(other)
         elif isinstance(other, Track):
-            other_track = self.__class__(other.segment)
+            other_track = self.__class__(other.segment, other.seg_prefix, other.seg_offset)
             new_track = new_track + other_track.segment
         else:
             raise TypeError('Tracks can only be added to Segment or Track objects')
         return Track(new_track)
     
-    def __mul__(self, other):
+    def __mul__(self, other: int) -> TTrack:
         if isinstance(other, int):
-            if other <= 0:
-                raise TypeError('Tracks can only be multiplied by positive integers greater than 0')
+            if other < 0:
+                raise TypeError('Tracks can only be multiplied by positive integers')
             new_track = self.segment.copy()
             new_track = new_track * other
             return Track(new_track)
         else:
-            raise TypeError('Tracks can only be multiplied by positive integers greater than 0')
+            raise TypeError('Tracks can only be multiplied by positive integers')
     
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.segment)
     
-    def info(self):
+    def info(self) -> Dict[str, any]:
         for i, s in enumerate(self.segment):
             s._info['name'] = self.seg_prefix + str(i + self.seg_offset).zfill(3)
         return {
             'length': sum(s._info['length'] for s in self.segment),
-            'segments': [s._info for s in self.segment],
+            'segment': [s._info for s in self.segment],
         }
     
-    def plot(self, angle: (int|float) = 0):
-        if isinstance(angle, int) or isinstance(angle, float):
-            angle %= 360.0
-        else:
-            raise TypeError('The "angle" argument must be integer or float')
+    def plot(self, angle: float = 0) -> TTrack:
+        angle %= 360.0
 
         xabs = self.segment[0]._img['tl'][0]
         yabs = self.segment[0]._img['tl'][1]
@@ -228,55 +222,90 @@ class Track(object):
         
         return self
     
-    def save(self, name = 'Track.svg'):
+    def save(self, name: str = 'Track.svg') -> None:
         self._figure.save(name)
     
     __rmul__ = __mul__
     
 #Loop class
+@typechecked
 class Loop(Track):
-    def __init__(self, l = 2, w = 1, **kwars):
-        self.shape = (l, w)
+    def __init__(self, l: int = 2, w: int = 1, **kwars) -> None:
+        self._l = l
+        self._w = w
 
-        if (self.shape[0] < 2):
+        if (self._l < 2):
             raise ValueError('The length of the loop must be at least 2')
-        elif (self.shape[1] < 1):
+        elif (self._w < 1):
             raise ValueError('The width of the loop must be at least 1')
         else:
-            if (self.shape[1] == 1):
-                self._track = TRACK180 + ((self.shape[0] - 2) * TRACK0) + TRACK180 + ((self.shape[0] - 2) * TRACK0)
+            if (self._w == 1):
+                self._track = TRACK180 + ((self._l - 2) * TRACK0) + TRACK180 + ((self._l - 2) * TRACK0)
             else:
-                self._track = TRACK90 + ((self.shape[1] - 2) * TRACK0) + TRACK90 + ((self.shape[0] - 2) * TRACK0) + TRACK90 + ((self.shape[1] - 2) * TRACK0) + TRACK90 + ((self.shape[0] - 2) * TRACK0)
+                self._track = TRACK90 + ((self._w - 2) * TRACK0) + TRACK90 + ((self._l - 2) * TRACK0) + TRACK90 + ((self._w - 2) * TRACK0) + TRACK90 + ((self._l - 2) * TRACK0)
         super().__init__(self._track.segment, **kwars)
 
-    def __add__(self, other):
+    def __add__(self, other: (TSegment|TTrack)) -> TAssembly:
         if isinstance(other, Segment):
             new_track = Track([other])
-            new_assembly = Assembly([self, new_track])
-            return new_assembly
+            return Assembly([self, new_track])
         elif isinstance(other, Track):
-            new_assembly = Assembly([self, other])
-            return new_assembly
+            return Assembly([self, other])
 
-    def __mul__(self, other):
-        if isinstance(other, int):
-            l = [self]
-            return Assembly([ item for item in l for _ in range(other) ])
+    def __mul__(self, other: int) -> TAssembly:
+        l = [self]
+        return Assembly([ item for item in l for _ in range(other) ])
 
     __rmul__ = __mul__
 
-    def save(self, name = 'Loop.svg'):
+    def save(self, name: str = 'Loop.svg') -> None:
         self._figure.save(name)
 
 #Assembly class
+@typechecked
 class Assembly(object):
-    def __init__(self, tracks):
-        self.track = list(tracks)
+    def __init__(self, tracks: List[Track], name: str = 'gAssembly_1') -> None:
+        self.name = name
+        self.track = list()
+        
+        old_prefix = None
+        for track in tracks:
+            if old_prefix != track.seg_prefix:
+                t_len = track.seg_offset
+            self.track.append(Track(track.segment, track.seg_prefix, t_len))
+            t_len += len(track)
+            old_prefix = track.seg_prefix
+    
+    def info(self) -> Dict[str, any]:
+        return {
+            'name': self.name,
+            'length': sum(t.info()['length'] for t in self.track),
+            'track': [t.info() for t in self.track],
+        }
+
+class _sh_param:
+    def __init__(self):
+        self.shuttle ={
+                'count': '10',
+                'convoy': 'Inactive',
+                'collision_distance': '0.002',
+                'error_stop': '0.006',
+                'sh_stereotype': 'ShuttleStereotype_1',
+                'sh_size': '50',
+                'magnet_plate': '2',
+                'magnet_type': 'Straight',
+                'collision_strategy': 'Constant',
+                'extent_front': '0.025',
+                'extent_back': '0.025',
+                'width': '0.046',
+            }
+
+PARAM: Final = _sh_param()
 
 #Get shuttle model
-def _get_sh_model(param):
-    if ('sh_size' in param):
-        print('bien')
+def get_sh_model(param = PARAM.shuttle):
+    if (param['sh_size'] == '50'):
+        print('bien', param['sh_size'])
     else:
         raise ValueError('The input dictionary must include the key "sh_size"')
 
@@ -292,22 +321,8 @@ def _get_sh_model(param):
 
 #Constant definition
 TRACK0: Final = Track([Segment('aa')])
-TRACK45 = Track([Segment('ab'), Segment('ba')])
-TRACK90 = Track([Segment('ab'), Segment('bb'), Segment('ba')])
-TRACK135 = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('ba')])
-TRACK180 = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('bb'), Segment('ba')])
+TRACK45: Final = Track([Segment('ab'), Segment('ba')])
+TRACK90: Final = Track([Segment('ab'), Segment('bb'), Segment('ba')])
+TRACK135: Final = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('ba')])
+TRACK180: Final = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('bb'), Segment('ba')])
 
-SHUTTLE_PARAM = {
-    'count': '10',
-    'convoy': 'Inactive',
-    'collision_distance': '0.002',
-    'error_stop': '0.006',
-    'sh_stereotype': 'ShuttleStereotype_1',
-    'sh_size': '50',
-    'magnet_plate': '2',
-    'magnet_type': 'Straight',
-    'collision_strategy': 'Constant',
-    'extent_front': '0.025',
-    'extent_back': '0.025',
-    'width': '0.046',
-}
