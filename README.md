@@ -170,7 +170,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ---
 
 ## Changes
-### v0.0.2 (In progress)
+### v0.0.3 (Latest release)
 > #### General changes:
 > - License changed from MIT to GNU GPLv3.
 > - Added TypeError for addition and multiplication operators.
