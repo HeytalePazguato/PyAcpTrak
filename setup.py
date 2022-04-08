@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.1'
+version = '0.0.2'
 
 with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
@@ -30,16 +30,17 @@ setup(
     packages = find_packages(where='src'),
     python_requires = '>=3.9',
     install_requires = [
-    	'svgutils >= 0.3.4',
-		'numpy >= 1.22.3',
-		'IPython >= 7.23.1',
-		'importlib >= 1.0.4',
+        'svgutils >= 0.3.4',
+        'numpy >= 1.22.3',
+        'IPython >= 7.23.1',
+        'importlib >= 1.0.4',
         'typing >= 3.7',
-        'typeguard >= 2.13.3'
+        'typeguard >= 2.13.3',
+        'xmltodict >= 0.12.0'
     ],
     extras_require = {
-    	'dev': [
-    		'pytest >= 7.1'
-    	],
+        'dev': [
+            'pytest >= 7.1'
+        ],
     },
 )

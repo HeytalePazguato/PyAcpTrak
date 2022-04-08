@@ -175,6 +175,8 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > - License changed from MIT to GNU GPLv3.
 > - Added TypeError for addition and multiplication operators.
 > - Added `typeguard` and `typing` packages to typecheck the methods.
+> - Added `xmltodict` package to create the xml configuration files for the AS project.
+> - Added `PARAM` variable to configure the exported files.
 
 > #### Segment class:
 > - Change: Removed the `info` attribute.
@@ -182,9 +184,9 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > - Bug  fix: Multiplying a segment object by an integer "n" would create a Track class object with "n" segments all pointing to the same segment object.
 
 > #### Track class:
+> - New feature: The `seg_prefix` argument (Optional) was added to the `Track` class to create the segment variable. The default value is "gSeg_".
+> - New feature: The `seg_offset` argument (Optional) was added to the `Track` class to configure an offset for the segment variable. The default value is "1".
 > - New feature: The `info()` method was added to get the track information.
-> - New feature: The `seg_prefix` argument (Optional) was added to create the segment variable. The default value is "gSeg_".
-> - New feature: The `seg_offset` argument (Optional) was added to configure an offset for the segment variable. The default value is "1".
 > - Bug fix: Adding or multiplying Track objects would create a Track class object with elements pointing to the same segment objects
 
 > #### Loop class:
@@ -193,3 +195,6 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 
 > #### Assembly class:
 > - New feature: Class added to the package
+> - New feature: The `export()` method was added.
+>   - The assembly configuration file (AsmCfg.assembly) will be generated.
+>   - The shuttle stereotype file (ShCfg.shuttlestereotype) will be generated.
