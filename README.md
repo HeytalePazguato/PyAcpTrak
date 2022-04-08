@@ -177,6 +177,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > - Added `typeguard` and `typing` packages to typecheck the methods.
 > - Added `xmltodict` package to create the xml configuration files for the AS project.
 > - Added `PARAM` variable to configure the exported files.
+> - Reduced the size of SVG files.
 
 > #### Segment class:
 > - Change: Removed the `info` attribute.
