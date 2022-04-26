@@ -170,7 +170,11 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ---
 
 ## Changes
-### v0.0.3 (Latest release)
+### v0.0.4 (Latest release)
+> #### General changes:
+> - Bug fix: As a result of moving the "img" folder location in v0.0.3 the SVG images are not installed with the package, now this works correctly and the images are installed together with the package.
+
+### v0.0.3
 > #### General changes:
 > - License changed from MIT to GNU GPLv3.
 > - Added TypeError for addition and multiplication operators.
@@ -182,7 +186,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > #### Segment class:
 > - Change: Removed the `info` attribute.
 > - New feature: The `info()` method was added to get the segment information.
-> - Bug  fix: Multiplying a segment object by an integer "n" would create a Track class object with "n" segments all pointing to the same segment object.
+> - Bug fix: Multiplying a segment object by an integer "n" would create a Track class object with "n" segments all pointing to the same segment object.
 
 > #### Track class:
 > - New feature: The `seg_prefix` argument (Optional) was added to the `Track` class to create the segment variable. The default value is "gSeg_".

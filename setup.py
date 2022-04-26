@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.3'
+version = '0.0.4'
 
 with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
@@ -43,4 +43,5 @@ setup(
             'pytest >= 7.1'
         ],
     },
+    include_package_data = True,
 )

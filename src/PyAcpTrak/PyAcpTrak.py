@@ -155,6 +155,9 @@ class Track(object):
         self.segment = [Segment(seg._s) for seg in segments]
         self.seg_prefix = seg_prefix
         self.seg_offset = seg_offset
+
+        for i, s in enumerate(self.segment):
+            s._info['name'] = self.seg_prefix + str(i + self.seg_offset).zfill(3)
         
     def __add__(self, other: (TSegment|TTrack)) -> TTrack:
         new_track = self.segment.copy()
@@ -181,8 +184,6 @@ class Track(object):
         return len(self.segment)
     
     def info(self, compact: bool = False) -> Dict[str, any]:
-        for i, s in enumerate(self.segment):
-            s._info['name'] = self.seg_prefix + str(i + self.seg_offset).zfill(3)
         return {
             'seg_prefix': self.seg_prefix,
             'seg_offset': self.seg_offset,
@@ -203,7 +204,7 @@ class Track(object):
         ymin = 0.0
 
         asm = []
-        for seg in self.segment:
+        for i, seg in enumerate(self.segment):
             rot += seg._img['rs']
             xabs += (seg._img['tl'][1] * np.sin(np.deg2rad(rot)))
             yabs -= (seg._img['tl'][1] * np.cos(np.deg2rad(rot)))
@@ -219,7 +220,8 @@ class Track(object):
             ymin = min(ymin, yabs, yabs + sum(y for y in nh if y < 0))
     
             asm.append(sc.SVG(get_resource('pyacptrak', 'img/' + seg._svg)).move(round(xabs, 3), round(yabs, 3)).rotate(round(rot, 3)))
-    
+            #asm.append(sc.Text(str(i + self.seg_offset)).move(round(xabs, 3), round(yabs + 10, 3)).rotate(round(rot, 3)))
+
             xabs += ((seg._img['tr'][0] * np.cos(np.deg2rad(rot))) + (seg._img['tr'][1] * np.cos(np.deg2rad(rot + 90))) + (gap * np.cos(np.deg2rad(rot))))
             yabs += ((seg._img['tr'][0] * np.sin(np.deg2rad(rot))) + (seg._img['tr'][1] * np.sin(np.deg2rad(rot + 90))) + (gap * np.sin(np.deg2rad(rot))))
             rot +=  seg._img['re']
