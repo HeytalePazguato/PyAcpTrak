@@ -172,7 +172,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ## Changes
 ### v0.0.4 (Latest release)
 > #### General changes:
-> - Bug fix: As a result of moving the "img" folder location in v0.0.3 the SVG images are not installed with the package, now this works correctly and the images are installed together with the package.
+> - Bug fix: As a result of moving the "img" folder location in v0.0.3 the SVG images were not installed with the package, now this works correctly and the images are installed together with the package.
 
 ### v0.0.3
 > #### General changes:
