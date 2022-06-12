@@ -237,6 +237,7 @@ It is possible to plot each track of the assembly by accessing the track index:
 asm1.track[0].plot()
 ```
 
+![image](https://user-images.githubusercontent.com/101816677/173235687-9875f2f7-02fc-4baf-88d3-8c51a142a0c0.png)
 
 <pyacptrak.pyacptrak.Track at 0x248101d68c0>
 
@@ -244,6 +245,7 @@ asm1.track[0].plot()
 asm1.track[1].plot()
 ```
 
+![image](https://user-images.githubusercontent.com/101816677/173235711-c0866d72-0b7e-4fcf-baa9-c8011e4269fa.png)
 
 <pyacptrak.pyacptrak.Track at 0x248101d7ca0>
 
@@ -348,11 +350,11 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > #### General Changes:
 > - Bug fix: Removed unecessary packages from `install_requires`. The combination some module versions generated the following error when `pyacptrak` was installed in Python 3.9:
 >```
- × python setup.py egg_info did not run successfully.
- │ exit code: 1
- ╰─> [1 lines of output]
-       ERROR: Can not execute `setup.py` since setuptools is not available in the build environment.
-       [end of output]
+> × python setup.py egg_info did not run successfully.
+> │ exit code: 1
+> ╰─> [1 lines of output]
+>       ERROR: Can not execute `setup.py` since setuptools is not available in the build environment.
+>       [end of output]
 >```
 > - New feature: When the shuttle type and/or the controller configuration changes via the `PARAM` class, the PID controller parameters will be automatically calculated based on the recomended values from Automation Help.
 > - New feature: The `info()` method of the Track, Loop and Assembly classes may now receive an optional argument `compact` (The default value is False)
