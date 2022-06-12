@@ -8,20 +8,35 @@ from typeguard import typechecked
 import xmltodict
 
 version = distribution('pyacptrak').version
+_developerMode = False
 
-TSegment = TypeVar("TSegment", bound="Segment")
-TTrack = TypeVar("TTrack", bound="Track")
-TAssembly = TypeVar("TAssembly", bound="Assembly")
+TSegment = TypeVar("TSegment", bound = "Segment")
+TTrack = TypeVar("TTrack", bound = "Track")
+TST = TypeVar('TST', TSegment, TTrack)
+TAssembly = TypeVar("TAssembly", bound = "Assembly")
 
-def get_resource(module: str, name: str) -> str:
+@typechecked
+def get_resource(module: str, name: str):
     return resources.files(module).joinpath(name)
 
-def get_class_elements(obj, extra='    '):
-    return str(obj.__class__) + '\n' + '\n'.join(
-        (extra + (str(item) + ' = ' +
-                  (get_class_elements(obj.__dict__[item], extra + '    ') if hasattr(obj.__dict__[item], '__dict__') else str(
-                      obj.__dict__[item])))
-         for item in sorted(obj.__dict__)))
+def get_class_elements(obj, extra: str = '    '):
+    if globals()['_developerMode']:
+        return str(obj.__class__) + '\n' + '\n'.join(
+            (extra + (str(item) + ' = ' +
+                      (get_class_elements(obj.__dict__[item], extra + '    ') if hasattr(obj.__dict__[item], '__dict__') else str(
+                          obj.__dict__[item])))
+             for item in sorted(obj.__dict__)))
+    else:
+        return str(obj.__class__) + '\n' + '\n'.join(
+            (extra + (str(item) + ' = ' +
+                      (get_class_elements(obj.__dict__[item], extra + '    ') if hasattr(obj.__dict__[item], '__dict__') else str(
+                          obj.__dict__[item])))
+             for item in sorted(obj.__dict__) if not item.startswith('_')))
+
+@typechecked
+def set_option(variable :str, value) -> None:
+    if variable == 'developer':
+        globals()['_developerMode'] = value
 
 #Segment class
 @typechecked
@@ -122,7 +137,7 @@ class Segment(object):
 
         self._figure.save(name)
     
-    def __add__(self, other: (TSegment|TTrack)) -> TTrack:
+    def __add__(self, other: TST) -> TTrack:
         if isinstance(other, Segment):
             return Track([self, other])
         elif isinstance(other, Track):
@@ -159,7 +174,7 @@ class Track(object):
         for i, s in enumerate(self.segment):
             s._info['name'] = self.seg_prefix + str(i + self.seg_offset).zfill(3)
         
-    def __add__(self, other: (TSegment|TTrack)) -> TTrack:
+    def __add__(self, other: TST) -> TTrack:
         new_track = self.segment.copy()
         if isinstance(other, Segment):
             new_track.append(other)
@@ -260,7 +275,7 @@ class Loop(Track):
                 self._track = TRACK90 + ((self._w - 2) * TRACK0) + TRACK90 + ((self._l - 2) * TRACK0) + TRACK90 + ((self._w - 2) * TRACK0) + TRACK90 + ((self._l - 2) * TRACK0)
         super().__init__(self._track.segment, **kwars)
 
-    def __add__(self, other: (TSegment|TTrack)) -> TAssembly:
+    def __add__(self, other: TST) -> TAssembly:
         if isinstance(other, Segment):
             new_track = Track([other])
             return Assembly([self, new_track])
@@ -305,23 +320,23 @@ class Assembly(object):
         _grp_visu = _mk_visu_dict()
         
         _asm_cfg = {
-                            'Configuration': {
-                                'Element': {
-                                    '@ID': "gAssembly_1",
-                                    '@Type': "assembly",
-                                    'Group': [
-                                        _grp_track,
-                                        _grp_segment,
-                                        _grp_shuttle,
-                                        _grp_visu,
-                                    ],
-                                    'Selector': {
-                                        '@ID': "Alarms",
-                                        '@Value': 'None'
-                                    }
+                        'Configuration': {
+                            'Element': {
+                                '@ID': "gAssembly_1",
+                                '@Type': "assembly",
+                                'Group': [
+                                    _grp_track,
+                                    _grp_segment,
+                                    _grp_shuttle,
+                                    _grp_visu,
+                                ],
+                                'Selector': {
+                                    '@ID': "Alarms",
+                                    '@Value': 'None'
                                 }
                             }
                         }
+                    }
         
         _asm_cfg_tree = xmltodict.unparse(_asm_cfg, pretty=True, full_document=False)
 
@@ -816,13 +831,13 @@ def _mk_seg_dict(param: _segment = PARAM.segment):
         raise ValueError(f'The segment simulation is not valid, please configure one of the following values: {_simulation}')
     
     if param.elongation.lower() not in _elongation:
-        raise ValueError(f'The segment simulation is not valid, please configure one of the following values: {_elongation}')
+        raise ValueError(f'The segment elongation is not valid, please configure one of the following values: {_elongation}')
     
     if param.stop_reaction.lower() not in _stop_reaction:
-        raise ValueError(f'The segment simulation is not valid, please configure one of the following values: {_stop_reaction}')
+        raise ValueError(f'The segment stop reaction is not valid, please configure one of the following values: {_stop_reaction}')
     
     if param.speed_filter.lower() not in _speed_filter:
-        raise ValueError(f'The segment simulation is not valid, please configure one of the following values: {_speed_filter}')
+        raise ValueError(f'The segment speed filter is not valid, please configure one of the following values: {_speed_filter}')
     
     return {
                 "@ID": "CommonSegmentSettings",

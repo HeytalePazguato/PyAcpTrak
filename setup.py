@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.4'
+version = '0.0.5'
 
 with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
@@ -33,7 +33,6 @@ setup(
         'svgutils >= 0.3.4',
         'numpy >= 1.22.3',
         'IPython >= 7.23.1',
-        'importlib >= 1.0.4',
         'typing >= 3.7',
         'typeguard >= 2.13.3',
         'xmltodict >= 0.12.0'
