@@ -334,7 +334,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ---
 
 ## Changes
-### v0.0.6 (Latest release)
+### v0.0.6 (2022.06.18) [Latest release]
 > #### General changes
 > - Change: The library `svgutils` has been removed and replaced with `svgwrite`.
 > - Change: The SVG resources installed with `pyacptrak` are now removed.
@@ -350,7 +350,7 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 >   - seg_id_stroke: str = None: Configure the stroke (Edge) color of the segment id, accepts a hexadecimal color code. The default value is '#BBBBBB'.
 >   - seg_id_stroke_width: float = None: Configure the width of the segment id stroke. The default value is '0.15'
 
-### v0.0.5
+### v0.0.5 (2022.06.12)
 > #### General changes:
 > - Bug fix: Removed unecessary packages from `install_requires`. The combination some module versions generated the following error when `pyacptrak` was installed in Python 3.9:
 >```
@@ -371,11 +371,11 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > - New feature: The `seg_prefix` argument is available to configure a prefix for the segment variable names, the default value is "gSeg_".
 > - New feature: The `seg_offset` argument is available to configure an offset for the segment variable names, the default value is "1".
 
-### v0.0.4
+### v0.0.4 (2022.04.26)
 > #### General changes:
 > - Bug fix: As a result of moving the "img" folder location in v0.0.3 the SVG images were not installed with the package, now this works correctly and the images are installed together with the package.
 
-### v0.0.3
+### v0.0.3 (2022.03.23)
 > #### General changes:
 > - License changed from MIT to GNU GPLv3.
 > - Added TypeError for addition and multiplication operators.
