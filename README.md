@@ -9,7 +9,6 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pyacptrak)](https://www.python.org/downloads/)
 [![Twitter](https://img.shields.io/twitter/follow/HeytalePazguato?style=social)](https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Efollow%7Ctwgr%5EHeytalePazguato&region=follow_link&screen_name=HeytalePazguato)
 
-
 ## Install
 
 To install pyacptrak, run the following command:
@@ -25,7 +24,6 @@ To install pyacptrak, along with the tools you need to develop and run tests, ru
 ```
 pip install pyacptrak[dev]
 ```
-
 
 ## Main Features
 
@@ -55,8 +53,6 @@ at.Segment('aa').plot()
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158948767-9d10a414-21d3-42b3-ab1c-e54eace0c39f.png)
 
-<pyacptrak.pyacptrak.segment at 0x17d8f72d930>
-
 The plot function supports rotation in degrees:
 ```
 import pyacptrak as at
@@ -64,8 +60,6 @@ import pyacptrak as at
 at.Segment('ab').plot(-45)
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158949082-e38760c1-25fe-425e-b56e-ef96c223fbc2.png)
-
-<pyacptrak.pyacptrak.segment at 0x17daed042b0>
 
 ### Work with tracks (Track class)
 
@@ -78,8 +72,6 @@ at.TRACK135.plot()
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158949482-f06e91bc-f8b9-4e11-b0fc-a7fe1149a15e.png)
 
-<pyacptrak.pyacptrak.track at 0x17daec2f250>
-
 But you could also build your own tracks using individual segments.
 
 ```
@@ -88,8 +80,6 @@ track1 = (at.Segment('aa') * 2) + at.Segment('ab') + (at.Segment('bb') * 2) + at
 track1.plot()
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158949973-eea998ae-32fc-491f-955c-c5fbef496978.png)
-
-<pyacptrak.pyacptrak.track at 0x17daf060700>
 
 Or using the pre-configured tracks (This makes it easier).
 
@@ -100,8 +90,6 @@ track1.plot()
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158949973-eea998ae-32fc-491f-955c-c5fbef496978.png)
 
-<pyacptrak.pyacptrak.track at 0x17daf060700>
-
 The plot function supports rotation for tracks:
 
 ```
@@ -110,8 +98,6 @@ track1 = (at.TRACK0 * 2) + at.TRACK135
 track1.plot(15)
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158950300-9ffa4009-c5fe-4402-8284-003a8c8d5a1f.png)
-
-<pyacptrak.pyacptrak.track at 0x17daef17f10>
 
 The arguments `seg_prefix` (Default value "gSeg_") and `seg_offset` (default value "1") are available from v0.0.5 to configure the segment variable names
 
@@ -125,8 +111,6 @@ at.Loop(2,1).plot()
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158950730-1c74eb26-49b6-483a-b807-2f9887d9b7d8.png)
 
-<pyacptrak.pyacptrak.track at 0x17daed040a0>
-
 For loops wider than 1 it uses 90° tracks instead of 180°
 
 ```
@@ -135,8 +119,6 @@ at.Loop(3,2).plot()
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158950937-3a69abb0-5b25-4b3a-9b56-447b6b741304.png)
 
-<pyacptrak.pyacptrak.track at 0x17daf0b8880>
-
 The plot function also support rotation for loops
 
 ```
@@ -144,8 +126,6 @@ import pyacptrak as at
 at.Loop(3,2).plot(190)
 ```
 ![image](https://user-images.githubusercontent.com/101816677/158951085-4ce1008d-aa84-4158-98d0-e83406bb5326.png)
-
-<pyacptrak.pyacptrak.track at 0x17daf0ce020>
 
 ### Save the SVG files
 
@@ -237,15 +217,13 @@ It is possible to plot each track of the assembly by accessing the track index:
 asm1.track[0].plot()
 ```
 
-
-<pyacptrak.pyacptrak.Track at 0x248101d68c0>
+![image](https://user-images.githubusercontent.com/101816677/173235687-9875f2f7-02fc-4baf-88d3-8c51a142a0c0.png)
 
 ```
 asm1.track[1].plot()
 ```
 
-
-<pyacptrak.pyacptrak.Track at 0x248101d7ca0>
+![image](https://user-images.githubusercontent.com/101816677/173235711-c0866d72-0b7e-4fcf-baa9-c8011e4269fa.png)
 
 It is also possible to access all track methods from each Track element within the assembly class.
 
@@ -334,6 +312,18 @@ This will print the main track information and the number of segments in the tra
  'segment': 'The track has 12 segments'}
 ```
 
+### Configure the plot settings
+
+It is possible to configure the SVG settings (Starting with v0.0.6)
+
+```
+import pyacptrak as at
+
+at.Loop(3,1).plot(angle=20, show_id=True, seg_body_fill='#ff8800', seg_border_stroke='#0000ff', seg_id_stroke='#ff0000')
+```
+
+![image](https://user-images.githubusercontent.com/101816677/174421293-f234ee90-e321-41f5-95e9-a43d58baa4b4.png)
+
 ---
 ## License
 
@@ -344,26 +334,42 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ---
 
 ## Changes
-### v0.0.5 (Latest release)
-> #### General Changes:
+### v0.0.6 (Latest release)
+> #### General changes
+> - Change: The library `svgutils` has been removed and replaced with `svgwrite`.
+> - Change: The SVG resources installed with `pyacptrak` are now removed.
+> - New feature: All SVG images are now generated from scratch, this allows the library to modify the color of the elements and insert text (Like segment ID). This also expands the posibility to implement new features or add elements to the SVG images in future versions.
+> - New feature: All `plot()` methods have the following optional arguments to configure the SVG image:
+>   - show_id: bool = False: Show or hide the segment id.
+>   - seg_body_fill: str = None: Configure the fill color of the segment, accepts a hexadecimal color code. The default value is '#EEEEEE'.
+>   - seg_body_stroke: str = None: Configure the stroke (Edge) color of the segment body, acceptas a hexadecimal color code. The default value is '#A9A9A9'.
+>   - seg_border_stroke: str = None: Configure the stroke color of the segment border (The work area), accepts a hexadecimal color code. The default value is '#FF8800'.
+>   - seg_dir_fill: str = None: Configure the fill color of the arrow that represents the segment encoder direction, accepts a hexadecimal color code. The default value is '#CCCCCC'.
+>   - seg_dir_stroke: str = None: Configure the stroke (Edge) color of the segment direction arrow, accepts a hexadecimal color code. The default value is '#CCCCCC'.
+>   - seg_id_fill: str = None: Configure the fill color of the segment ID text, accepts a hexadecimal color code. The default value is '#BBBBBB'.
+>   - seg_id_stroke: str = None: Configure the stroke (Edge) color of the segment id, accepts a hexadecimal color code. The default value is '#BBBBBB'.
+>   - seg_id_stroke_width: float = None: Configure the width of the segment id stroke. The default value is '0.15'
+
+### v0.0.5
+> #### General changes:
 > - Bug fix: Removed unecessary packages from `install_requires`. The combination some module versions generated the following error when `pyacptrak` was installed in Python 3.9:
 >```
- × python setup.py egg_info did not run successfully.
- │ exit code: 1
- ╰─> [1 lines of output]
-       ERROR: Can not execute `setup.py` since setuptools is not available in the build environment.
-       [end of output]
+> × python setup.py egg_info did not run successfully.
+> │ exit code: 1
+> ╰─> [1 lines of output]
+>       ERROR: Can not execute `setup.py` since setuptools is not available in the build environment.
+>       [end of output]
 >```
 > - New feature: When the shuttle type and/or the controller configuration changes via the `PARAM` class, the PID controller parameters will be automatically calculated based on the recomended values from Automation Help.
-> - New feature: The `info()` method of the Track, Loop and Assembly classes may now receive an optional argument `compact` (The default value is False)
+> - New feature: The `info()` method of the Track, Loop and Assembly classes may now receive an optional argument `compact` (The default value is False).
 
 > #### Assembly class:
 > - New feature: the export method is available, it will automatically create the assembly configuration file `AsmCfg.assembly` and the shuttle stereotype file `ShCfg.shuttlestereotype`. Both files will be generated in the same folder where the python program is running and could be imported (Or copy/pasted) into the Automation Studio project.
-> - New feature: The `name` argument is available to configure a name for the assembly, the default value is "gAssembly_1"
+> - New feature: The `name` argument is available to configure a name for the assembly, the default value is "gAssembly_1".
 
 > #### Track class:
-> - New feature: The `seg_prefix` argument is available to configure a prefix for the segment variable names, the default value is "gSeg_"
-> - New feature: The `seg_offset` argument is available to configure an offset for the segment variable names, the default value is "1"
+> - New feature: The `seg_prefix` argument is available to configure a prefix for the segment variable names, the default value is "gSeg_".
+> - New feature: The `seg_offset` argument is available to configure an offset for the segment variable names, the default value is "1".
 
 ### v0.0.4
 > #### General changes:
@@ -387,14 +393,14 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 > - New feature: The `seg_prefix` argument (Optional) was added to the `Track` class to create the segment variable. The default value is "gSeg_".
 > - New feature: The `seg_offset` argument (Optional) was added to the `Track` class to configure an offset for the segment variable. The default value is "1".
 > - New feature: The `info()` method was added to get the track information.
-> - Bug fix: Adding or multiplying Track objects would create a Track class object with elements pointing to the same segment objects
+> - Bug fix: Adding or multiplying Track objects would create a Track class object with elements pointing to the same segment objects.
 
 > #### Loop class:
 > - New feature: Added addition and multiplication operators, the result will return an `Assembly` object.
 > - Bug fix: The inherited `length()` method didn't work because the `Loop` class had a `length` attribute that was overwritting the method `length()` of the parent class `Track`.
 
 > #### Assembly class:
-> - New feature: Class added to the package
+> - New feature: Class added to the package.
 > - New feature: The `export()` method was added.
 >   - The assembly configuration file (AsmCfg.assembly) will be generated.
 >   - The shuttle stereotype file (ShCfg.shuttlestereotype) will be generated.
