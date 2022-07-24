@@ -338,13 +338,13 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ---
 
 ## Changes
-### v0.0.7 ()
+### v0.0.7 (2022.07.24) [Latest release]
 > #### Loop class:
 > - Bug fix: The save method was not working because of a typo in the image attribute.
 > - Bug fix: The class initialization didn't accept the arguments `seg_prefix` and `seg_offset`.
 > - Bug fix: The `Assembly` class export method was not working due to wrong `string` to `byte` conversion.
 
-### v0.0.6 (2022.06.18) [Latest release]
+### v0.0.6 (2022.06.18)
 > #### General changes:
 > - Change: The library `svgutils` has been removed and replaced with `svgwrite`.
 > - Change: The SVG resources installed with `pyacptrak` are now removed.
