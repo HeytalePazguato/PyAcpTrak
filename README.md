@@ -9,6 +9,8 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pyacptrak)](https://www.python.org/downloads/)
 [![Twitter](https://img.shields.io/twitter/follow/HeytalePazguato?style=social)](https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Efollow%7Ctwgr%5EHeytalePazguato&region=follow_link&screen_name=HeytalePazguato)
 
+---
+
 ## Install
 
 To install pyacptrak, run the following command:
@@ -24,6 +26,8 @@ To install pyacptrak, along with the tools you need to develop and run tests, ru
 ```
 pip install pyacptrak[dev]
 ```
+
+---
 
 ## Main Features
 
@@ -334,8 +338,14 @@ Licensed under the [GNU GPLv3 license](LICENSE).
 ---
 
 ## Changes
+### v0.0.7 ()
+> #### Loop class:
+> - Bug fix: The save method was not working because of a typo in the image attribute.
+> - Bug fix: The class initialization didn't accept the arguments `seg_prefix` and `seg_offset`.
+> - Bug fix: The `Assembly` class export method was not working due to wrong `string` to `byte` conversion.
+
 ### v0.0.6 (2022.06.18) [Latest release]
-> #### General changes
+> #### General changes:
 > - Change: The library `svgutils` has been removed and replaced with `svgwrite`.
 > - Change: The SVG resources installed with `pyacptrak` are now removed.
 > - New feature: All SVG images are now generated from scratch, this allows the library to modify the color of the elements and insert text (Like segment ID). This also expands the posibility to implement new features or add elements to the SVG images in future versions.

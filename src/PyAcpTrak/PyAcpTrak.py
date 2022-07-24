@@ -45,11 +45,10 @@ class _Config(object):
     def devMode(self, v: bool):
         self._devMode = v
 
-# define global configuration variable
+# Define global configuration variable
 _config = _Config()
 
 def get_class_elements(obj, extra: str = '    '):
-    #if globals()['_developerMode']:
     if _config.devMode:
         return str(obj.__class__) + '\n' + '\n'.join(
             (extra + (str(item) + ' = ' +
@@ -68,7 +67,7 @@ def set_option(variable :str, value) -> None:
     if hasattr(_config, variable):
         setattr(_config, variable, value)
 
-#Segment class
+# Segment class
 @typechecked
 class Segment(object):
     def __init__(self, s: str) -> None:
@@ -309,11 +308,10 @@ class Segment(object):
         else:
             raise ValueError('Segment not supported. Supported segments "AA", "AB", "BA" or "BB"')
         
-        #self._g = self._create_group(self._svg)
         
     def _group(self, constructor, angle: float = 0, show_id: bool = False, seg_body_fill: str = None, seg_body_stroke: str = None, seg_border_stroke: str = None, seg_dir_fill: str = None, seg_dir_stroke: str = None, seg_id_fill: str = None, seg_id_stroke: str = None, seg_id_stroke_width: float = None):
         # Get constructor variables
-        name = self._info['name'] if self._info['name'] is not None else 'gSegAB'
+        name = self._info['name'] if self._info['name'] is not None else 'gSeg_001'
         
         seg_body_points = constructor['svg']['body']['points']
         seg_body_fill = constructor['svg']['body']['fill'] if seg_body_fill is None else seg_body_fill
@@ -414,7 +412,7 @@ class Segment(object):
     
     __rmul__ = __mul__
     
-#Track class
+# Track class
 @typechecked
 class Track(object):
     def __init__(self, segments: List[Segment], seg_prefix: str = 'gSeg_', seg_offset: int = 1):
@@ -475,7 +473,6 @@ class Track(object):
         xmin = 0.0
         ymin = 0.0
         
-        #track = []
         # Create drawing and append the group
         self._dwg = svgwrite.Drawing(profile='tiny')
         
@@ -528,10 +525,10 @@ class Track(object):
     
     __rmul__ = __mul__
     
-#Loop class
+# Loop class
 @typechecked
 class Loop(Track):
-    def __init__(self, l: int = 2, w: int = 1) -> None:
+    def __init__(self, l: int = 2, w: int = 1, seg_prefix: str = 'gSeg_', seg_offset: int = 1) -> None:
         self._l = l
         self._w = w
 
@@ -544,7 +541,7 @@ class Loop(Track):
                 self._track = TRACK180 + ((self._l - 2) * TRACK0) + TRACK180 + ((self._l - 2) * TRACK0)
             else:
                 self._track = TRACK90 + ((self._w - 2) * TRACK0) + TRACK90 + ((self._l - 2) * TRACK0) + TRACK90 + ((self._w - 2) * TRACK0) + TRACK90 + ((self._l - 2) * TRACK0)
-        super().__init__(self._track.segment)
+        super().__init__(self._track.segment, seg_prefix, seg_offset)
 
     def __add__(self, other: _TST) -> _TAssembly:
         if isinstance(other, Segment):
@@ -560,9 +557,9 @@ class Loop(Track):
     __rmul__ = __mul__
 
     def save(self, name: str = 'Loop.svg') -> None:
-        self.dwg.saveas(name)
+        self._dwg.saveas(name)
 
-#Assembly class
+# Assembly class
 @typechecked
 class Assembly(object):
     def __init__(self, tracks: List[Track], name: str = 'gAssembly_1') -> None:
@@ -615,7 +612,7 @@ class Assembly(object):
         with open(_asm_cfg_file, 'wb') as f:
             f.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
             f.write(b'<?AutomationStudio FileVersion="4.9"?>\n')
-            f.write(b'<?pyacptrak version="'+ version + b'" author="Jorge Centeno"?>\n')
+            f.write(b'<?pyacptrak version="'+ bytes(version,'utf-8') + b'" author="Jorge Centeno"?>\n')
             f.write(_asm_cfg_tree.encode('utf-8'))
         
         print(f'{_asm_cfg_file} created successfully')
@@ -626,12 +623,12 @@ class Assembly(object):
         with open(_sh_cfg_file, 'wb') as f:
             f.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
             f.write(b'<?AutomationStudio FileVersion="4.9"?>\n')
-            f.write(b'<?pyacptrak version="'+ version + b'" author="Jorge Centeno"?>\n')
+            f.write(b'<?pyacptrak version="'+ bytes(version,'utf-8') + b'" author="Jorge Centeno"?>\n')
             f.write(_sh_cfg_tree.encode('utf-8'))
         
         print(f'{_sh_cfg_file} created successfully')
 
-#Controller parameter internal class for segment internal class
+# Controller parameter internal class for segment internal class
 class _control_par(object):
     def __init__(self):
         self.pos_proportional_gain = 150
@@ -644,8 +641,8 @@ class _control_par(object):
     def __str__(self):
         return get_class_elements(self)
 
-#Segment internal class for parameter class
-class _segment(object):
+# Segment internal class for parameter class
+class _Segment(object):
     def __init__(self, sh):
         self.simulation = 'Off'
         self.elongation = 'Inactive'
@@ -832,7 +829,7 @@ class _segment(object):
         
         print('The control parameters have been updated')
 
-#Shuttle stereotype internal class for shuttle class
+# Shuttle stereotype internal class for shuttle class
 class _sh_stereotype_par(object):
     def __init__(self):
         self.velocity = 4.0
@@ -845,8 +842,8 @@ class _sh_stereotype_par(object):
     def __str__(self):
         return get_class_elements(self)
 
-#Shuttle internal class for parameter class
-class _shuttle(object):
+# Shuttle internal class for parameter class
+class _Shuttle(object):
     def __init__(self):
         self.count = 10
         self.convoy = 'Inactive'
@@ -964,30 +961,30 @@ class _shuttle(object):
     def bind_to(self, callback):
         self._observers.append(callback)
 
-#Visualization internal class for parameter class
-class _visu(object):
+# Visualization internal class for parameter class
+class _Visu(object):
     def __init__(self):
         self.task = 4
 
-#Parameter internal class
-class _param(object):
+# Parameter internal class
+class _Param(object):
     def __init__(self):
-        self.shuttle = _shuttle()
-        self.segment = _segment(self.shuttle)
-        self.visu = _visu()
+        self.shuttle = _Shuttle()
+        self.segment = _Segment(self.shuttle)
+        self.visu = _Visu()
         
     def __str__(self):
         return get_class_elements(self)
     
-#Constant definition
-PARAM: Final = _param()
+# Constant definition
+PARAM: Final = _Param()
 TRACK0: Final = Track([Segment('aa')])
 TRACK45: Final = Track([Segment('ab'), Segment('ba')])
 TRACK90: Final = Track([Segment('ab'), Segment('bb'), Segment('ba')])
 TRACK135: Final = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('ba')])
 TRACK180: Final = Track([Segment('ab'), Segment('bb'), Segment('bb'), Segment('bb'), Segment('ba')])
 
-#Create track group dictionary
+# Create track group dictionary
 def _mk_track_dict(asm: Assembly):
     grp = []
     for i, track in enumerate(asm.track):
@@ -1089,9 +1086,9 @@ def _mk_track_dict(asm: Assembly):
                     'Group': grp}
     return tracks
 
-#Create segment group dictionary
+# Create segment group dictionary
 @typechecked
-def _mk_seg_dict(param: _segment = PARAM.segment):
+def _mk_seg_dict(param: _Segment = PARAM.segment):
     _simulation = ['off', 'on']
     _elongation = ['inactive', 'active']
     _stop_reaction = ['induction halt']
@@ -1223,7 +1220,7 @@ def _mk_seg_dict(param: _segment = PARAM.segment):
                 }
             }
 
-def _mk_sh_stereotype(param: _shuttle = PARAM.shuttle):
+def _mk_sh_stereotype(param: _Shuttle = PARAM.shuttle):
     return {
                     'Configuration': {
                         'Element': {
@@ -1314,9 +1311,9 @@ def _mk_sh_stereotype(param: _shuttle = PARAM.shuttle):
                     }
                 }
 
-#Create shuttle group dictionary
+# Create shuttle group dictionary
 @typechecked
-def _mk_sh_dict(param: _shuttle = PARAM.shuttle):
+def _mk_sh_dict(param: _Shuttle = PARAM.shuttle):
     _convoy = ['inactive', 'active']
     _collision_strategy = ['constant', 'variable', 'advanced constant', 'advanced variable']
     
@@ -1405,9 +1402,9 @@ def _mk_sh_dict(param: _shuttle = PARAM.shuttle):
                 ]
             }
 
-#Create visualization group dictionary
+# Create visualization group dictionary
 @typechecked
-def _mk_visu_dict(param: _visu = PARAM.visu):
+def _mk_visu_dict(param: _Visu = PARAM.visu):
     _task = [1, 2, 3, 4, 5, 6, 7, 8]
     
     if param.task not in _task:
